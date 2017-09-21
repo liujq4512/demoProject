@@ -1,0 +1,5 @@
+rootProject.name = 'demoProject'
+include 'rabbitMQ'
+include 'myUtils'
+include 'myExamples'
+

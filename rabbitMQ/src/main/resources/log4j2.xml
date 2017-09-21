@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+    <Properties>
+        <Property name="pathName">${sys:LC_LOG_DIR}/sunspear</Property>
+    </Properties>
+    <Appenders>
+        <RollingFile name="info" fileName="${pathName}/server.log"
+                     filePattern="${pathName}//$${date:yyyy-MM}/info_%d{yyyy-MM-dd}_%i.log.gz">
+            <PatternLayout>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %c{36} - %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+	           <TimeBasedTriggeringPolicy interval="1"
+		          modulate="true" />
+	           <SizeBasedTriggeringPolicy size="200M" />
+            </Policies>
+        </RollingFile>
+
+        <Console name="stdout" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="info"/>
+            <AppenderRef ref="stdout"/>
+        </Root>
+    </Loggers>
+</Configuration>
