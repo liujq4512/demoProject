@@ -3,6 +3,7 @@ package com.common.utils;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalUnit;
@@ -23,6 +24,8 @@ public class MyDateUtils {
         System.out.println("-----------" + format);
 
         Instant instant = Instant.now().plus(Duration.ofMinutes(10));
+
+        LocalDateTime dateTime = LocalDateTime.now();
     }
 
 

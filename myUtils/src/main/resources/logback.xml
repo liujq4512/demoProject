@@ -1,0 +1,78 @@
+<configuration>
+
+    <include resource="org/springframework/boot/logging/logback/base.xml" />
+
+
+    <property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} - [%thread] - %-5level - %X{JobName} - %logger{35} - %msg %n"/>
+    <property name="LOG_PATH" value="/opt/logs/cronJob" />
+
+    <springProperty name="spring.datasource.driverClassName" source="${drmain.datasource.driver-class-name}"/>
+    <springProperty name="spring.datasource.url" source="${drmain.datasource.url}"/>
+    <springProperty name="spring.datasource.username" source="${drmain.datasource.username}"/>
+    <springProperty name="spring.datasource.password" source="${drmain.datasource.password}"/>
+
+
+
+
+
+    <appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <!-- in the absence of the class attribute, it is assumed that the
+             desired discriminator type is
+             ch.qos.logback.classic.sift.MDCBasedDiscriminator -->
+        <discriminator>
+            <key>JobName</key>
+            <defaultValue>unknown</defaultValue>
+        </discriminator>
+        <sift>
+            <appender name="FILE-${JobName}" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>${JobName}.log</file>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                    <!-- daily rollover -->
+                    <fileNamePattern>${JobName}.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+
+                    <!-- keep 30 days' worth of history capped at 3GB total size -->
+                    <maxHistory>30</maxHistory>
+                    <totalSizeCap>3GB</totalSizeCap>
+                </rollingPolicy>
+
+                <encoder>
+                    <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} - [%thread] - %-5level - %X{JobName} - %logger{35} - %msg %n</pattern>
+                </encoder>
+            </appender>
+        </sift>
+    </appender>
+
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} - [%thread] - %-5level - %X{JobName} - %logger{35} - %msg %n</pattern>
+        </encoder>
+    </appender>
+
+   <appender name="DB" class="ch.qos.logback.classic.db.DBAppender" >
+       <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+           <level>ERROR</level>
+       </filter>
+        <connectionSource
+                class="ch.qos.logback.core.db.DataSourceConnectionSource">
+            <dataSource
+                    class="org.apache.tomcat.jdbc.pool.DataSource">
+                <driverClassName>com.mysql.jdbc.Driver</driverClassName>
+                <url>jdbc:mysql://10.18.19.43:3307/drmain</url>
+                <username>drmain</username>
+                <password>hkH=kN3</password>
+            </dataSource>
+        </connectionSource>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} - [%thread] %-5level %logger{35} - %X{JobName} - %msg %n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="DEBUG">
+        <appender-ref ref="SIFT" />
+        <appender-ref ref="console" />
+        <appender-ref ref="DB"/>
+    </root>
+</configuration>
