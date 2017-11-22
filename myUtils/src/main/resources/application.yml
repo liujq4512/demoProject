@@ -1,0 +1,31 @@
+quartz:
+  datasource:
+    url: jdbc:oracle:thin:@10.18.19.33:1521:dbdev2
+    username: quartz
+    password: quartz
+    driver-class-name: oracle.jdbc.OracleDriver
+
+oracle:
+  datasource:
+    url: jdbc:oracle:thin:@//10.18.19.33:1521/dbdev2
+    username: sl_main
+    password: sl_main
+    driver-class-name: oracle.jdbc.OracleDriver
+
+drmain:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://10.18.19.43:3307/drmain
+    username: drmain
+    password: hkH=kN3
+    max-active: 10
+  mybatis:
+    config: mybatis-mysql-sqlmap-config.xml
+
+athena:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://10.18.19.43:3307/athena
+    username: athena
+    password: athena_passwd
+

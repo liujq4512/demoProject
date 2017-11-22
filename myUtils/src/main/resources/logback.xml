@@ -6,10 +6,7 @@
     <property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} - [%thread] - %-5level - %X{JobName} - %logger{35} - %msg %n"/>
     <property name="LOG_PATH" value="/opt/logs/cronJob" />
 
-    <springProperty name="spring.datasource.driverClassName" source="${drmain.datasource.driver-class-name}"/>
-    <springProperty name="spring.datasource.url" source="${drmain.datasource.url}"/>
-    <springProperty name="spring.datasource.username" source="${drmain.datasource.username}"/>
-    <springProperty name="spring.datasource.password" source="${drmain.datasource.password}"/>
+    <property resorce="application.yml"/>
 
 
 
@@ -59,10 +56,10 @@
                 class="ch.qos.logback.core.db.DataSourceConnectionSource">
             <dataSource
                     class="org.apache.tomcat.jdbc.pool.DataSource">
-                <driverClassName>com.mysql.jdbc.Driver</driverClassName>
-                <url>jdbc:mysql://10.18.19.43:3307/drmain</url>
-                <username>drmain</username>
-                <password>hkH=kN3</password>
+                <driverClassName>${drmain.datasource.driver-class-name}</driverClassName>
+                <url>${drmain.datasource.url}</url>
+                <username>${drmain.datasource.username}</username>
+                <password>${drmain.datasource.password}</password>
             </dataSource>
         </connectionSource>
         <encoder>
