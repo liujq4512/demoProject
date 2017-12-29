@@ -7,14 +7,15 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven { url 'http://nexus.dianrong.com/nexus/content/repositories/maven-central/' }
 }
 
 dependencies {
     compile group: 'com.dangdang', name: 'sharding-jdbc-core', version: '1.5.3'
     compile group: 'org.javatuples', name: 'javatuples', version: '1.2'
+    compile group: 'redis.clients', name: 'jedis', version: '2.8.2'
 
-    testCompile group: 'org.springframework', name: 'spring-test', version: '4.3.5.RELEASE'
-    testCompile group: 'org.testng', name: 'testng', version: '6.10'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
 
 }
 

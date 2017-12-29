@@ -9,6 +9,19 @@ public abstract class AbstractMustHasDefaultConstructor {
     public AbstractMustHasDefaultConstructor(int i){
 
     }
+
+    protected void showSelf(){
+        System.out.println(">>>>>>>>>show my shelf<<<<<<<<");
+    }
+
+    public void display(String s){
+        System.out.println(">>>>>>>>>>>>>>>>>>" + s);
+    }
+
+    public void act(String s){
+        display(s);
+        showSelf();
+    }
 }
 
 class Test extends AbstractMustHasDefaultConstructor{
@@ -18,4 +31,17 @@ class Test extends AbstractMustHasDefaultConstructor{
         super(i);
     }
 
+    public void display(String s ){
+
+        System.out.println("---------" + s );
+    }
+
+    public void showSelf(){
+        System.out.println("---------show my self------------");
+    }
+
+    public static void main(String[] args) {
+        Test t = new Test(0);
+        t.act("hello " );
+    }
 }

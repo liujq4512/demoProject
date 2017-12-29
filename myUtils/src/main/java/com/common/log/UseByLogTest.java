@@ -11,11 +11,6 @@ public class UseByLogTest {
 
     public static void logJobName(){
         logger.error(">>>>>>>>>>> <<<<<<<<<<<<<<");
-        try {
-            throw new IllegalArgumentException("=============");
-        }catch (Exception e){
-            logger.error(e.getMessage(),e);
-        }
 
     }
 

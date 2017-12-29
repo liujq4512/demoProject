@@ -48,7 +48,7 @@
         </encoder>
     </appender>
 
-   <appender name="DB" class="ch.qos.logback.classic.db.DBAppender" >
+<!--   <appender name="DB" class="ch.qos.logback.classic.db.DBAppender" >
        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
            <level>ERROR</level>
        </filter>
@@ -65,11 +65,9 @@
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} - [%thread] %-5level %logger{35} - %X{JobName} - %msg %n</pattern>
         </encoder>
-    </appender>
+    </appender>-->
 
     <root level="DEBUG">
-        <appender-ref ref="SIFT" />
         <appender-ref ref="console" />
-        <appender-ref ref="DB"/>
     </root>
 </configuration>
