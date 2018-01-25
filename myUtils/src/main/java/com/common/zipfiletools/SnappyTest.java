@@ -1,5 +1,6 @@
 package com.common.zipfiletools;
 
+import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import org.xerial.snappy.Snappy;
 import org.xerial.snappy.SnappyFramedInputStream;
 
@@ -19,17 +20,23 @@ public class SnappyTest {
 
   public static void main(String[] args) throws Exception{
     //compress();
-    uncompress();
+//    uncompress();
+testSimpleBytes();
+/*    String s ="{\"1\":[{\"p\":114203,\"a\":-13281.69}]}";
+    byte[] compress = Snappy.compress(s);
+    String ss = new String(compress);
 
+    System.out.println(new String(Snappy.uncompress(ss.getBytes())));*/
   }
 
 
-  public static void testSimpleBytes(){
-    byte[] bytes = compressHtml(uncompressFile);
-    System.out.println(bytes);
+  public static void testSimpleBytes()throws Exception{
+    String s = "11111111111SDFASDFS中";
+    String ss = "{\"101\":[{\"p\":20004,\"a\":7888.25,\"i\":0,\"f\":0}],\"102\":[{\"p\":20004,\"a\":-7.25,\"i\":0,\"f\":0}]}";
+    byte[] compress = Snappy.compress(s.getBytes("UTF-8"));
+    String s1 = new String(compress,"UTF-8");
+    System.out.println(new String(Snappy.uncompress(s1.getBytes("UTF-8"))));
 
-    String s = decompressHtml(bytes);
-    System.out.println(s);
   }
 
   public static  byte[] compressHtml(String html){

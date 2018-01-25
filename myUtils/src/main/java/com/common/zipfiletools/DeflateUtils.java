@@ -5,6 +5,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.Base64;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
@@ -16,9 +18,23 @@ public class DeflateUtils {
 
   private static final int BUFFER_SIZE = 4 * 1024;
   public static String file = "/opt/logs/gc.log";
-  public static String destFile = "/opt/logs/deflate_gc.log";
-  public static String uncompressFile = "/opt/logs/deflate_uncompress_gc.log";
+  public static String destFile = "/opt/logs/deflate_dictionary_gc.log";
+  public static String uncompressFile = "/opt/logs/deflate_dictionary_uncompress_gc.log";
 
+
+  public static byte[] getDictionary(){
+    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+    try{
+      ObjectOutputStream oos = new ObjectOutputStream(byteArrayOutputStream);
+      oos.writeChars("HeapDumpOnOutOfMemoryError");
+      oos.writeChars("concurrent");
+      oos.writeChars("[GC");
+    }catch (Exception e){
+      e.printStackTrace();
+    }
+    return byteArrayOutputStream.toByteArray();
+  }
   /**
    * compress data by {@linkplain Level}
    *
@@ -37,6 +53,7 @@ public class DeflateUtils {
     Deflater deflater = new Deflater();
     // set compression level
     deflater.setLevel(level.getLevel());
+    deflater.setDictionary(getDictionary());
     deflater.setInput(data);
 
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
@@ -68,6 +85,7 @@ public class DeflateUtils {
 
 
     Inflater inflater = new Inflater();
+    inflater.setDictionary(getDictionary());
     inflater.setInput(data);
 
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
@@ -78,6 +96,75 @@ public class DeflateUtils {
     }
     byte[] output = outputStream.toByteArray();
     outputStream.close();
+    return output;
+  }
+
+
+
+  public static String compress(String data) throws IOException{
+
+    if(data==null){
+      return data;
+    }
+    String output = "";
+
+    Deflater compress = new Deflater();
+
+    compress.reset();
+    compress.setInput(data.getBytes("UTF-8"));
+    compress.finish();
+    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+    try {
+      byte[] buf = new byte[1024];
+      while (!compress.finished()) {
+        int i = compress.deflate(buf);
+        bos.write(buf, 0, i);
+      }
+      output = new String(Base64.getEncoder().encode(bos.toByteArray()),"UTF-8");
+    } catch (Exception e) {
+      output = data;
+      e.printStackTrace();
+    } finally {
+      try {
+        bos.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+    compress.end();
+    return output;
+  }
+
+
+  public static String uncompress(String data) throws IOException{
+    if(data==null){
+      return data;
+    }
+    String output = "";
+
+    Inflater decompress = new Inflater();
+    decompress.reset();
+    decompress.setInput(Base64.getDecoder().decode(data));
+
+    ByteArrayOutputStream o = new ByteArrayOutputStream();
+    try {
+      byte[] buf = new byte[1024];
+      while (!decompress.finished()) {
+        int i = decompress.inflate(buf);
+        o.write(buf, 0, i);
+      }
+      output = new String(o.toByteArray(),"UTF-8");
+    } catch (Exception e) {
+      output = data;
+      e.printStackTrace();
+    } finally {
+      try {
+        o.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+    decompress.end();
     return output;
   }
 
@@ -109,7 +196,6 @@ public class DeflateUtils {
     private int level;
 
     Level(
-
       int level) {
       this.level = level;
     }
@@ -165,7 +251,7 @@ public class DeflateUtils {
 
 
   public static void main(String[] args) throws Exception{
-//    testCompress();
+    testCompress();
     testDecompress();
   }
 }
